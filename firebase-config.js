@@ -1,13 +1,13 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyAdQT-inUvJrk6zpezYJRSOxUMZm4gAf1U",
-  authDomain: "messenger-chat000.firebaseapp.com",
-  projectId: "messenger-chat000",
-  storageBucket: "messenger-chat000.firebasestorage.app",
-  messagingSenderId: "142041302540",
-  appId: "1:142041302540:web:cea9a7f6c81a9fad529029"
+    apiKey: "PASTE_YOUR_API_KEY_HERE",
+    authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
+    projectId: "PASTE_YOUR_PROJECT_ID_HERE",
+    storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
+    messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
+    appId: "PASTE_YOUR_APP_ID_HERE"
 };
 
-const IMGBB_API_KEY = "87b58d438e0cbe5226c1df0a8071621e"; 
+const IMGBB_API_KEY = "PASTE_YOUR_IMGBB_API_KEY_HERE";
 
 firebase.initializeApp(firebaseConfig);
 
