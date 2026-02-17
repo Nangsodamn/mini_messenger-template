@@ -5327,122 +5327,354 @@ body.light-mode #incoming-call-modal .incoming-call h3 {
     transform: scale(1.1) rotate(10deg);
 }
 
-#change-name-modal .modal-header h3,
-#change-name-modal .modal-header h3 i,
-#change-name-modal .modal-header button i,
-#change-name-modal .current-name-display label,
-#change-name-modal .current-name-display span,
-#change-name-modal .modal-input,
-#change-name-modal .modal-input::placeholder,
-#change-name-modal .modal-btn.primary,
-#change-name-modal .modal-btn.secondary {
-    color: #ffffff !important;
+#change-name-modal .modal-content {
+    background: linear-gradient(145deg, #1e1e2f, #2d2d44);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+    overflow: hidden;
 }
 
-#change-name-modal .modal-content {
-    background: #2d2d44;
+#change-name-modal .modal-header {
+    background: rgba(79, 70, 229, 0.15);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(79, 70, 229, 0.3);
+}
+
+#change-name-modal .modal-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffffff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#change-name-modal .modal-header h3 i {
+    background: #4f46e5;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.5);
+}
+
+#change-name-modal .modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+#change-name-modal .modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+#change-name-modal .modal-body {
+    padding: 24px;
 }
 
 #change-name-modal .current-name-display {
-    background: #36364f;
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+#change-name-modal .current-name-display label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a5b4fc !important;
+    margin-bottom: 6px;
+    display: block;
+}
+
+#change-name-modal .current-name-display span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff !important;
+    display: block;
+    padding: 4px 0;
 }
 
 #change-name-modal .modal-input {
-    background: #36364f;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(79, 70, 229, 0.3);
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-size: 16px;
+    color: #ffffff !important;
+    transition: all 0.3s;
+    margin-bottom: 24px;
+}
+
+#change-name-modal .modal-input:focus {
     border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+    outline: none;
+    background: rgba(0, 0, 0, 0.5);
 }
 
-#reaction-viewers-modal .modal-header h3,
-#reaction-viewers-modal .modal-header h3 i,
-#reaction-viewers-modal .modal-header button i,
-#reaction-viewers-modal #reaction-viewers-title,
-#reaction-viewers-modal .user-item-name,
-#reaction-viewers-modal .user-item-status {
+#change-name-modal .modal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+#change-name-modal .modal-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+#change-name-modal .modal-btn.primary {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #ffffff !important;
+    box-shadow: 0 8px 16px -4px rgba(79, 70, 229, 0.4);
+}
+
+#change-name-modal .modal-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -4px rgba(79, 70, 229, 0.6);
+}
+
+#change-name-modal .modal-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff !important;
 }
 
-#reaction-viewers-modal .modal-content {
-    background: #2d2d44;
-}
-
-#reaction-viewers-modal .user-item:hover {
-    background: #36364f;
-}
-
-#user-info-modal .modal-header h3,
-#user-info-modal .modal-header h3 i,
-#user-info-modal .modal-header button i,
-#user-info-modal .info-row label,
-#user-info-modal .info-row label i,
-#user-info-modal .info-row span,
-#user-info-modal .user-id-text {
-    color: #ffffff !important;
+#change-name-modal .modal-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 #user-info-modal .modal-content {
-    background: #2d2d44;
+    background: linear-gradient(145deg, #1e1e2f, #2d2d44);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    overflow: hidden;
+}
+
+#user-info-modal .modal-header {
+    background: rgba(79, 70, 229, 0.15);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(79, 70, 229, 0.3);
+}
+
+#user-info-modal .modal-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffffff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#user-info-modal .modal-header h3 i {
+    background: #4f46e5;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.5);
+}
+
+#user-info-modal .modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+#user-info-modal .modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+#user-info-modal .modal-body {
+    padding: 24px;
+}
+
+#user-info-modal .user-info-avatar {
+    position: relative;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+#user-info-modal .user-info-avatar img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #4f46e5;
+    box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.5);
+    transition: all 0.3s;
+}
+
+#user-info-modal .user-info-avatar:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px -5px rgba(79, 70, 229, 0.7);
 }
 
 #user-info-modal .user-info-details {
-    background: #36364f;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    border-radius: 20px;
+    padding: 20px;
 }
 
 #user-info-modal .info-row {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(79, 70, 229, 0.2);
+    transition: all 0.2s;
+}
+
+#user-info-modal .info-row:hover {
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 12px;
+    padding-left: 16px;
+}
+
+#user-info-modal .info-row:last-child {
+    border-bottom: none;
+}
+
+#user-info-modal .info-row label {
+    width: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #a5b4fc !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#user-info-modal .info-row label i {
+    color: #4f46e5;
+    font-size: 16px;
+    width: 20px;
+}
+
+#user-info-modal .info-row span {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff !important;
+    word-break: break-word;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 12px;
+    border-radius: 8px;
 }
 
 #user-info-modal .user-id-text {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-#reaction-viewers-modal .modal-header h3,
-#reaction-viewers-modal .modal-header h3 i,
-#reaction-viewers-modal .modal-header button i,
-#reaction-viewers-modal #reaction-viewers-title {
-    color: #ffffff !important;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 13px;
+    background: rgba(79, 70, 229, 0.2) !important;
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    letter-spacing: 0.5px;
 }
 
 #reaction-viewers-modal .modal-content {
-    background: #2d2d44;
-    max-width: 400px;
+    background: linear-gradient(145deg, #1e1e2f, #2d2d44);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 24px;
+    max-width: 480px;
+    overflow: hidden;
+}
+
+#reaction-viewers-modal .modal-header {
+    background: rgba(79, 70, 229, 0.15);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(79, 70, 229, 0.3);
+}
+
+#reaction-viewers-modal #reaction-viewers-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#reaction-viewers-modal .modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #ffffff;
+    cursor: pointer;
 }
 
 #reaction-viewers-modal .modal-body {
     padding: 20px;
-    max-height: 400px;
+    max-height: 450px;
     overflow-y: auto;
 }
 
 #reaction-viewers-modal .user-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
     padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
+    border-radius: 12px;
     margin-bottom: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(79, 70, 229, 0.1);
 }
 
 #reaction-viewers-modal .user-item:hover {
-    background: #36364f;
-    transform: translateX(5px);
+    background: rgba(79, 70, 229, 0.15);
 }
 
 #reaction-viewers-modal .user-item-avatar {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
 }
 
 #reaction-viewers-modal .user-item-avatar img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #4f46e5;
+    display: block; 
 }
 
 #reaction-viewers-modal .status-indicator {
@@ -5452,7 +5684,7 @@ body.light-mode #incoming-call-modal .incoming-call h3 {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid #2d2d44;
+    border: 2px solid #1e1e2f;
 }
 
 #reaction-viewers-modal .status-indicator.online {
@@ -5465,56 +5697,37 @@ body.light-mode #incoming-call-modal .incoming-call h3 {
 
 #reaction-viewers-modal .user-item-info {
     flex: 1;
+    min-width: 0;
 }
 
 #reaction-viewers-modal .user-item-name {
+    font-size: 15px;
+    font-weight: 600;
     color: #ffffff !important;
-    font-weight: 500;
-    font-size: 14px;
     margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #reaction-viewers-modal .user-item-status {
-    color: rgba(255, 255, 255, 0.6) !important;
     font-size: 12px;
+    color: rgba(255, 255, 255, 0.5) !important;
 }
 
 #reaction-viewers-modal .user-reaction-badge {
     font-size: 24px;
-    background: rgba(79, 70, 229, 0.2);
-    width: 48px;
-    height: 48px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(79, 70, 229, 0.1);
     border-radius: 50%;
-    border: 2px solid #4f46e5;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    border: 1px solid #4f46e5;
+    flex-shrink: 0;
 }
 
-#reaction-viewers-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 18px;
-}
-
-#reaction-viewers-title::before {
-    content: '';
-    font-size: 24px;
-}
-
-@keyframes reactionPop {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-#reaction-viewers-modal .user-reaction-badge {
-    animation: reactionPop 0.3s ease-out;
+#reaction-viewers-modal .user-item:hover .user-reaction-badge {
+    background: rgba(79, 70, 229, 0.3);
 }
