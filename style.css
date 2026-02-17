@@ -5326,3 +5326,195 @@ body.light-mode #incoming-call-modal .incoming-call h3 {
     background: #dc2626;
     transform: scale(1.1) rotate(10deg);
 }
+
+#change-name-modal .modal-header h3,
+#change-name-modal .modal-header h3 i,
+#change-name-modal .modal-header button i,
+#change-name-modal .current-name-display label,
+#change-name-modal .current-name-display span,
+#change-name-modal .modal-input,
+#change-name-modal .modal-input::placeholder,
+#change-name-modal .modal-btn.primary,
+#change-name-modal .modal-btn.secondary {
+    color: #ffffff !important;
+}
+
+#change-name-modal .modal-content {
+    background: #2d2d44;
+}
+
+#change-name-modal .current-name-display {
+    background: #36364f;
+}
+
+#change-name-modal .modal-input {
+    background: #36364f;
+    border-color: #4f46e5;
+}
+
+#reaction-viewers-modal .modal-header h3,
+#reaction-viewers-modal .modal-header h3 i,
+#reaction-viewers-modal .modal-header button i,
+#reaction-viewers-modal #reaction-viewers-title,
+#reaction-viewers-modal .user-item-name,
+#reaction-viewers-modal .user-item-status {
+    color: #ffffff !important;
+}
+
+#reaction-viewers-modal .modal-content {
+    background: #2d2d44;
+}
+
+#reaction-viewers-modal .user-item:hover {
+    background: #36364f;
+}
+
+#user-info-modal .modal-header h3,
+#user-info-modal .modal-header h3 i,
+#user-info-modal .modal-header button i,
+#user-info-modal .info-row label,
+#user-info-modal .info-row label i,
+#user-info-modal .info-row span,
+#user-info-modal .user-id-text {
+    color: #ffffff !important;
+}
+
+#user-info-modal .modal-content {
+    background: #2d2d44;
+}
+
+#user-info-modal .user-info-details {
+    background: #36364f;
+}
+
+#user-info-modal .info-row {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+#user-info-modal .user-id-text {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#reaction-viewers-modal .modal-header h3,
+#reaction-viewers-modal .modal-header h3 i,
+#reaction-viewers-modal .modal-header button i,
+#reaction-viewers-modal #reaction-viewers-title {
+    color: #ffffff !important;
+}
+
+#reaction-viewers-modal .modal-content {
+    background: #2d2d44;
+    max-width: 400px;
+}
+
+#reaction-viewers-modal .modal-body {
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#reaction-viewers-modal .user-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+#reaction-viewers-modal .user-item:hover {
+    background: #36364f;
+    transform: translateX(5px);
+}
+
+#reaction-viewers-modal .user-item-avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+#reaction-viewers-modal .user-item-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4f46e5;
+}
+
+#reaction-viewers-modal .status-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #2d2d44;
+}
+
+#reaction-viewers-modal .status-indicator.online {
+    background: #22c55e;
+}
+
+#reaction-viewers-modal .status-indicator.offline {
+    background: #64748b;
+}
+
+#reaction-viewers-modal .user-item-info {
+    flex: 1;
+}
+
+#reaction-viewers-modal .user-item-name {
+    color: #ffffff !important;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+#reaction-viewers-modal .user-item-status {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 12px;
+}
+
+#reaction-viewers-modal .user-reaction-badge {
+    font-size: 24px;
+    background: rgba(79, 70, 229, 0.2);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #4f46e5;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+#reaction-viewers-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+}
+
+#reaction-viewers-title::before {
+    content: '';
+    font-size: 24px;
+}
+
+@keyframes reactionPop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#reaction-viewers-modal .user-reaction-badge {
+    animation: reactionPop 0.3s ease-out;
+}
