@@ -15,6 +15,9 @@ let currentMessageForForward = null;
 let recognition = null;
 let isRecording = false;
 
+let currentSelectedMessageForReactionView = null;
+let currentReactionViewMessageId = null;
+
 window.displayedGCMessageIds = new Set();
 window.displayedPMMessageIds = new Set();
 window.gcMessagesLoaded = false;
@@ -444,6 +447,8 @@ async function initializeApp() {
         
         initCallUI();
         listenForIncomingCalls();
+
+        initUserInfoModals();
         
         console.log('✅ App initialized successfully');
         showToast('✅ Connected to chat!', 'success');
@@ -453,6 +458,267 @@ async function initializeApp() {
         showToast('Failed to initialize. Refreshing...', 'error');
         setTimeout(() => window.location.reload(), 2000);
     }
+}
+
+function initUserInfoModals() {
+    if (!document.getElementById('change-name-modal')) {
+        const changeNameModal = document.createElement('div');
+        changeNameModal.id = 'change-name-modal';
+        changeNameModal.className = 'modal';
+        changeNameModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Change Display Name</h3>
+                    <button onclick="closeModal('change-name-modal')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="new-display-name" placeholder="Enter new name" class="modal-input">
+                    <div class="modal-actions">
+                        <button onclick="updateDisplayName()" class="modal-btn primary">Save Changes</button>
+                        <button onclick="closeModal('change-name-modal')" class="modal-btn secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(changeNameModal);
+    }
+
+    if (!document.getElementById('reaction-viewers-modal')) {
+        const reactionViewersModal = document.createElement('div');
+        reactionViewersModal.id = 'reaction-viewers-modal';
+        reactionViewersModal.className = 'modal';
+        reactionViewersModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="reaction-viewers-title">Reactions</h3>
+                    <button onclick="closeModal('reaction-viewers-modal')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div id="reaction-viewers-list" class="users-list"></div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(reactionViewersModal);
+    }
+
+    if (!document.getElementById('user-info-modal')) {
+        const userInfoModal = document.createElement('div');
+        userInfoModal.id = 'user-info-modal';
+        userInfoModal.className = 'modal';
+        userInfoModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>User Information</h3>
+                    <button onclick="closeModal('user-info-modal')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body user-info-body">
+                    <div class="user-info-avatar">
+                        <img id="user-info-avatar" src="" alt="">
+                    </div>
+                    <div class="user-info-details">
+                        <div class="info-row">
+                            <label>Name:</label>
+                            <span id="user-info-name"></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Email:</label>
+                            <span id="user-info-email"></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Status:</label>
+                            <span id="user-info-status"></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Last Seen:</label>
+                            <span id="user-info-lastseen"></span>
+                        </div>
+                        <div class="info-row">
+                            <label>User ID:</label>
+                            <span id="user-info-uid"></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Joined:</label>
+                            <span id="user-info-joined"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(userInfoModal);
+    }
+}
+
+function showChangeNameModal() {
+    const modal = document.getElementById('change-name-modal');
+    const input = document.getElementById('new-display-name');
+    if (input && currentUser) {
+        input.value = currentUser.displayName || '';
+    }
+    if (modal) modal.classList.add('active');
+}
+
+async function updateDisplayName() {
+    const input = document.getElementById('new-display-name');
+    const newName = input.value.trim();
+    
+    if (!newName) {
+        showToast('Please enter a name', 'error');
+        return;
+    }
+    
+    try {
+        await currentUser.updateProfile({
+            displayName: newName
+        });
+        
+        await db.collection('users').doc(currentUser.uid).update({
+            name: newName,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        const userNameEl = document.getElementById('current-user-name');
+        if (userNameEl) userNameEl.textContent = newName;
+        
+        showToast('✅ Name updated successfully!', 'success');
+        closeModal('change-name-modal');
+        
+    } catch (error) {
+        console.error('Error updating name:', error);
+        showToast('Failed to update name', 'error');
+    }
+}
+
+async function showReactionViewers(messageId, reaction, isGC = true) {
+    try {
+        let messageData;
+        
+        if (isGC) {
+            const doc = await db.collection('groupChats').doc(GROUP_CHAT_ID)
+                .collection('messages').doc(messageId).get();
+            messageData = doc.data();
+        } else {
+            if (!currentPMUser) return;
+            const chatId = [currentUser.uid, currentPMUser.id].sort().join('_');
+            const doc = await db.collection('privateChats').doc(chatId)
+                .collection('messages').doc(messageId).get();
+            messageData = doc.data();
+        }
+        
+        if (!messageData || !messageData.reactions) return;
+
+        const userIds = [];
+        Object.entries(messageData.reactions).forEach(([userId, userReaction]) => {
+            if (userReaction === reaction) {
+                userIds.push(userId);
+            }
+        });
+        
+        if (userIds.length === 0) return;
+
+        const usersList = document.getElementById('reaction-viewers-list');
+        const title = document.getElementById('reaction-viewers-title');
+        title.innerHTML = `${reaction} - ${userIds.length} ${userIds.length === 1 ? 'person' : 'people'}`;
+        
+        usersList.innerHTML = '<div class="loading">Loading users...</div>';
+        
+        const userPromises = userIds.map(uid => 
+            db.collection('users').doc(uid).get()
+        );
+        
+        const userDocs = await Promise.all(userPromises);
+        
+        usersList.innerHTML = '';
+        
+        userDocs.forEach(doc => {
+            if (doc.exists) {
+                const user = doc.data();
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user-item';
+                userDiv.onclick = () => showUserInfo(user.uid);
+                
+                const firstLetter = (user.name || 'User').charAt(0).toUpperCase();
+                const avatarUrl = user.photoURL || `https://ui-avatars.com/api/?name=${firstLetter}&background=4f46e5&color=fff&size=100`;
+                
+                userDiv.innerHTML = `
+                    <div class="user-item-avatar">
+                        <img src="${avatarUrl}" alt="${escapeHTML(user.name || 'User')}">
+                        <span class="status-indicator ${user.online ? 'online' : 'offline'}"></span>
+                    </div>
+                    <div class="user-item-info">
+                        <div class="user-item-name">${escapeHTML(user.name || 'User')}</div>
+                        <div class="user-item-status">${user.online ? '● Online' : formatLastSeen(user.lastSeen)}</div>
+                    </div>
+                    <div class="user-reaction-badge">
+                        ${reaction}
+                    </div>
+                `;
+                usersList.appendChild(userDiv);
+            }
+        });
+        
+        const modal = document.getElementById('reaction-viewers-modal');
+        if (modal) modal.classList.add('active');
+        
+    } catch (error) {
+        console.error('Error showing reaction viewers:', error);
+        showToast('Failed to load reaction viewers', 'error');
+    }
+}
+
+async function showUserInfo(userId) {
+    try {
+        const userDoc = await db.collection('users').doc(userId).get();
+        
+        if (!userDoc.exists) {
+            showToast('User not found', 'error');
+            return;
+        }
+        
+        const user = userDoc.data();
+
+        let email = user.email || 'Not available';
+        let joined = user.joinedAt ? new Date(user.joinedAt.toDate()).toLocaleDateString() : 'Unknown';
+
+        document.getElementById('user-info-name').textContent = user.name || 'Unknown';
+        document.getElementById('user-info-email').textContent = email;
+        document.getElementById('user-info-status').textContent = user.online ? 'Online' : 'Offline';
+        document.getElementById('user-info-lastseen').textContent = user.online ? 'Now' : (user.lastSeen ? formatLastSeenFull(user.lastSeen) : 'Unknown');
+        document.getElementById('user-info-uid').textContent = userId;
+        document.getElementById('user-info-joined').textContent = joined;
+        
+        const avatar = document.getElementById('user-info-avatar');
+        const firstLetter = (user.name || 'U').charAt(0).toUpperCase();
+        avatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${firstLetter}&background=4f46e5&color=fff&size=200`;
+        
+        const modal = document.getElementById('user-info-modal');
+        if (modal) modal.classList.add('active');
+        
+    } catch (error) {
+        console.error('Error loading user info:', error);
+        showToast('Failed to load user information', 'error');
+    }
+}
+
+function formatLastSeenFull(timestamp) {
+    if (!timestamp) return 'Unknown';
+    if (!timestamp.toDate) return 'Unknown';
+    
+    const lastSeen = timestamp.toDate();
+    const now = new Date();
+    const diffSeconds = Math.floor((now - lastSeen) / 1000);
+    
+    if (diffSeconds < 60) return 'Just now';
+    if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} minutes ago`;
+    if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hours ago`;
+    if (diffSeconds < 604800) return `${Math.floor(diffSeconds / 86400)} days ago`;
+    
+    return lastSeen.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 
 function initCallUI() {
@@ -1243,20 +1509,20 @@ function appendGCMessage(message, container, userMap = {}, messageId) {
         
         reactionsHtml = '<div class="message-reactions">';
         Object.entries(reactionCounts).forEach(([reaction, count]) => {
-            reactionsHtml += `<span class="reaction-badge" onclick="addReaction('${messageId}', '${reaction}', true)">${reaction} ${count}</span>`;
+            reactionsHtml += `<span class="reaction-badge" onclick="showReactionViewers('${messageId}', '${reaction}', true)">${reaction} ${count}</span>`;
         });
         reactionsHtml += '</div>';
     }
     
     messageDiv.innerHTML = `
-        <div class="message-avatar">
+        <div class="message-avatar" onclick="showUserInfo('${message.senderId}')">
             <img src="${escapeHTML(avatarUrl)}" 
                  alt="${escapeHTML(senderName)}" 
                  loading="lazy"
                  onerror="this.onerror=null; this.src='${escapeHTML(fallbackAvatar)}';">
         </div>
         <div class="message-content">
-            <div class="message-sender">${escapeHTML(message.senderId === currentUser?.uid ? 'You' : senderName)}</div>
+            <div class="message-sender" onclick="showUserInfo('${message.senderId}')">${escapeHTML(message.senderId === currentUser?.uid ? 'You' : senderName)}</div>
             ${contentHtml}
             ${reactionsHtml}
             <div class="message-footer">
@@ -1967,16 +2233,18 @@ function appendPMMessage(message, container, messageId) {
     
     const isSentByMe = message.senderId === currentUser?.uid;
     
-    let senderName, senderPhoto, senderFirstLetter;
+    let senderName, senderPhoto, senderFirstLetter, senderId;
     
     if (isSentByMe) {
         senderName = 'You';
         senderFirstLetter = (currentUser?.displayName || 'U').charAt(0).toUpperCase();
         senderPhoto = currentUser?.photoURL || '';
+        senderId = currentUser?.uid;
     } else {
         senderName = currentPMUser?.name || 'User';
         senderFirstLetter = (currentPMUser?.name || 'U').charAt(0).toUpperCase();
         senderPhoto = currentPMUser?.photoURL || '';
+        senderId = currentPMUser?.id;
     }
     
     const fallbackAvatar = `https://ui-avatars.com/api/?name=${senderFirstLetter}&background=${isSentByMe ? '4f46e5' : '64748b'}&color=fff&size=100&bold=true`;
@@ -2023,7 +2291,7 @@ function appendPMMessage(message, container, messageId) {
         
         reactionsHtml = '<div class="message-reactions">';
         Object.entries(reactionCounts).forEach(([reaction, count]) => {
-            reactionsHtml += `<span class="reaction-badge" onclick="addReaction('${messageId}', '${reaction}', false)">${reaction} ${count}</span>`;
+            reactionsHtml += `<span class="reaction-badge" onclick="showReactionViewers('${messageId}', '${reaction}', false)">${reaction} ${count}</span>`;
         });
         reactionsHtml += '</div>';
     }
@@ -2036,14 +2304,14 @@ function appendPMMessage(message, container, messageId) {
     }
     
     messageDiv.innerHTML = `
-        <div class="message-avatar">
+        <div class="message-avatar" onclick="showUserInfo('${senderId}')">
             <img src="${escapeHTML(avatarUrl)}" 
                  alt="${escapeHTML(senderName)}"
                  loading="lazy"
                  onerror="this.onerror=null; this.src='${escapeHTML(fallbackAvatar)}';">
         </div>
         <div class="message-content">
-            <div class="message-sender">${escapeHTML(senderName)}</div>
+            <div class="message-sender" onclick="showUserInfo('${senderId}')">${escapeHTML(senderName)}</div>
             ${forwardIndicator}
             ${contentHtml}
             ${reactionsHtml}
@@ -2378,6 +2646,7 @@ function listenToGCMembers() {
                         
                         const memberDiv = document.createElement('div');
                         memberDiv.className = 'member-item';
+                        memberDiv.onclick = () => showUserInfo(memberId);
                         memberDiv.innerHTML = `
                             <div class="member-avatar">
                                 <img src="${escapeHTML(avatarUrl)}" 
