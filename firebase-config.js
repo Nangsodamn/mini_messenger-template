@@ -7,7 +7,7 @@ const firebaseConfig = {
     appId: "PASTE_YOUR_APP_ID_HERE"
 };
 
-const IMGBB_API_KEY = "PASTE_YOUR_IMGBB_API_KEY_HERE";
+const IMGBB_API_KEY = "1c45c407ab61538d6f87491f565fc8dc";
 
 firebase.initializeApp(firebaseConfig);
 
