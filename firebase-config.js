@@ -1,10 +1,10 @@
 const firebaseConfig = {
-    apiKey: "PASTE_YOUR_API_KEY_HERE",
-    authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
-    projectId: "PASTE_YOUR_PROJECT_ID_HERE",
-    storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
-    messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
-    appId: "PASTE_YOUR_APP_ID_HERE"
+    apiKey: "AIzaSyCk-9btSBih9tqB0bnrt-PIAHJH8GpkwvE",
+    authDomain: "who-r-you-d15ff.firebaseapp.com",
+    projectId: "who-r-you-d15ff",
+    storageBucket: "who-r-you-d15ff.firebasestorage.app",
+    messagingSenderId: "191405162194",
+    appId: "1:191405162194:web:82e7852898b1107107370b"
 };
 
 const IMGBB_API_KEY = "1c45c407ab61538d6f87491f565fc8dc";
